@@ -170,7 +170,6 @@ export class MetadataDisplay<
   renderMetadata = (metadata: IMetadata): JSX.Element => {
     return (
       <div
-        key={metadata.name}
         className={METADATA_ITEM}
         style={
           this.state.metadata.includes(metadata) ? {} : { display: 'none' }
@@ -186,6 +185,39 @@ export class MetadataDisplay<
       </div>
     );
   };
+
+  // renderCatMetadata = (metadata: IMetadata, tag: String): JSX.Element => {
+  //   return (
+  //     <div
+  //       // key={metadata.name+"_"+tag}
+  //       className={METADATA_ITEM}
+  //       style={
+  //         this.state.metadata.includes(metadata) ? {} : { display: 'none' }
+  //       }
+  //     >
+  //       <ExpandableComponent
+  //         displayName={metadata.display_name}
+  //         tooltip={metadata.metadata.description}
+  //         actionButtons={this.actionButtons(metadata)}
+  //       >
+  //         <div id={metadata.name}>{this.renderCatExpandableContent(metadata,tag)}</div>
+  //       </ExpandableComponent>
+  //     </div>
+  //   );
+  // };
+
+  // renderCatExpandableContent(metadata: IDictionary<any>, tag: String): JSX.Element {
+  //   const metadataWithoutTags = metadata.metadata.code;
+  //   // delete metadataWithoutTags.tags;
+  //   return (
+  //     <div
+  //       key={metadata.name+"_"+tag}
+  //       className={METADATA_JSON_CLASS}
+  //     >
+  //       <JSONComponent json={metadataWithoutTags} />
+  //     </div>
+  //   );
+  // }
 
   /**
    * A function called when the `sortMetadata` property is `true`, sorts the
@@ -302,6 +334,77 @@ export class MetadataDisplay<
     if (this.props.sortMetadata) {
       this.sortMetadata();
     }
+    console.log('Meta Data');
+    console.log(this.props.metadata);
+    console.log(this.props.namespace);
+    // console.log(this.props.schema);
+
+    // const tag_dict = new Map();
+
+    // for (const metadata of this.props.metadata) {
+    //   if (metadata.metadata.tags) {
+    //     for (const tag of metadata.metadata.tags) {
+    //       if (tag_dict.has(tag)) {
+    //         tag_dict.get(tag).push(metadata);
+    //       } else {
+    //         tag_dict.set(tag, [metadata]);
+    //       }
+    //     }
+    //   }
+    // }
+    // console.log(tag_dict);
+    // console.log('Done');
+
+    // const sections: any[] = [];
+    // tag_dict.forEach((metadata_list, tag) => {
+    //   console.log("-------------")
+    //   console.log(metadata_list)
+    //   console.log(tag)
+    //   if (metadata_list.length > 0) {
+    //     sections.push(
+    //       <ExpandableComponent
+    //         displayName={tag}
+    //         tooltip={tag}
+    //         actionButtons={[]}
+    //       >
+    //         <div>{metadata_list.map(this.renderMetadata)}</div>
+    //       </ExpandableComponent>
+    //     );
+    //   }
+    // });
+
+    const tag_dict = new Map();
+
+    for (const metadata of this.props.metadata) {
+      if (metadata.metadata.folder) {
+        if (tag_dict.has(metadata.metadata.folder)) {
+          tag_dict.get(metadata.metadata.folder).push(metadata);
+        } else {
+          tag_dict.set(metadata.metadata.folder, [metadata]);
+        }
+      }
+    }
+    console.log(tag_dict);
+    console.log('Done');
+
+    const sections: any[] = [];
+    tag_dict.forEach((metadata_list, tag) => {
+      console.log('-------------');
+      console.log(metadata_list);
+      console.log(tag);
+      if (metadata_list.length > 0) {
+        sections.push(
+          <ExpandableComponent
+            displayName={tag}
+            tooltip={tag}
+            actionButtons={[]}
+          >
+            <div>{metadata_list.map(this.renderMetadata)}</div>
+          </ExpandableComponent>
+        );
+      }
+    });
+
     return (
       <div id="elyra-metadata" className={this.props.className}>
         <FilterTools
@@ -309,7 +412,8 @@ export class MetadataDisplay<
           tags={this.getActiveTags()}
           namespaceId={`${this.props.namespace}`}
         />
-        <div>{this.props.metadata.map(this.renderMetadata)}</div>
+        {/* <div>{this.props.metadata.map(this.renderMetadata)}</div> */}
+        {sections}
       </div>
     );
   }

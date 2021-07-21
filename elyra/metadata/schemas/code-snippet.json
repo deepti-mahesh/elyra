@@ -51,6 +51,16 @@
           },
           "minLength": 1
         },
+        "folder": {
+          "title": "Category",
+          "description": "Snippet classification for easy access",
+          "type": "string",
+          "uihints": {
+            "field_type": "dropdown",
+            "default_choices": ["Audio", "Image Processing", "Other"],
+            "category": "Category"
+          }
+        },
         "code": {
           "title": "Code",
           "description": "Code snippet code lines",

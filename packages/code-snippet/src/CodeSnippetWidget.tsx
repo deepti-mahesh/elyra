@@ -452,7 +452,7 @@ class CodeSnippetDisplay extends MetadataDisplay<
   renderMetadata = (metadata: IMetadata): JSX.Element => {
     return (
       <div
-        key={metadata.name}
+        // key={metadata.name}
         data-item-id={metadata.display_name}
         className={METADATA_ITEM}
         style={
